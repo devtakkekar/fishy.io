@@ -36,6 +36,14 @@ export function setupSettingsPanel({ getState, setState, saveState, updateUI, up
           if (!isNaN(amount) && amount >= 0) {
             setState({ gemCount: amount });
             cheatOutput.textContent = `Set gems to ${formatNumber(amount)}`;
+            // Add wobble animation to gem counter number
+            const gemCount = document.querySelector('#gem-count');
+            if (gemCount) {
+              gemCount.classList.add('counter-number');
+              gemCount.style.animation = 'none';
+              void gemCount.offsetWidth;
+              gemCount.style.animation = 'wobble 0.5s cubic-bezier(.36,.07,.19,.97) both';
+            }
           } else {
             cheatOutput.textContent = 'Invalid amount';
           }

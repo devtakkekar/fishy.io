@@ -349,12 +349,34 @@ function updateInventoryDisplay(searchTerm = '') {
 document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('fish-search');
   const searchBtn = document.getElementById('search-btn');
+  const resetFiltersBtn = document.getElementById('reset-filters-btn');
   const rarityFilters = document.querySelectorAll('.rarity-filter');
   const shinyFilter = document.getElementById('shiny-filter');
   
   // Function to update display with current filters
   const updateWithFilters = () => {
     updateInventoryDisplay(searchInput?.value || '');
+  };
+
+  // Function to reset all filters
+  const resetFilters = () => {
+    // Clear search input
+    if (searchInput) searchInput.value = '';
+    
+    // Uncheck all rarity filters
+    rarityFilters.forEach(filter => {
+      filter.checked = false;
+    });
+    
+    // Uncheck shiny filter
+    if (shinyFilter) shinyFilter.checked = false;
+    
+    // Set default sort to rarity (ascending)
+    localStorage.setItem('inventorySortColumn', 'rarity');
+    localStorage.setItem('inventorySortDirection', 'asc');
+    
+    // Update the display
+    updateInventoryDisplay();
   };
   
   if (searchInput && searchBtn) {
@@ -364,6 +386,11 @@ document.addEventListener('DOMContentLoaded', () => {
         updateWithFilters();
       }
     });
+  }
+
+  // Add reset button functionality
+  if (resetFiltersBtn) {
+    resetFiltersBtn.addEventListener('click', resetFilters);
   }
   
   // Add event listeners for all filters
@@ -477,6 +504,12 @@ function catchFish() {
       animation.remove();
     }, 1020);
     
+    // Add wobble animation to coin counter number
+    if (coinCountSpan) {
+      coinCountSpan.classList.add('counter-number');
+      wobbleElement(coinCountSpan);
+    }
+    
     // Update inventory
     const fishKey = `${rarity.name}|${fishName}`;
     if (!inventory[fishKey]) {
@@ -523,10 +556,8 @@ updateXPBar();
 // Initialize counters and inventory display on page load
 function formatNumber(n) {
   if (n < 10000) return n.toLocaleString();
-  if (n < 100000) return (n/1000).toFixed(1).replace(/\.0$/, '') + 'k'; // 10k - 99.9k
-  if (n < 1000000) return (n/1000).toFixed(2).replace(/\.0+$/, '') + 'k'; // 100k - 999.99k
-  if (n < 10000000) return (n/1000000).toFixed(2).replace(/\.0+$/, '') + 'M'; // 1M - 9.99M
-  if (n < 100000000) return (n/1000000).toFixed(2).replace(/\.0+$/, '') + 'M'; // 10M - 99.99M
+  if (n < 1000000) return Math.floor(n / 1000) + 'k'; // 10k - 999k
+  if (n < 1000000000) return Math.floor(n / 1000000) + 'M'; // 1M - 999M
   return n.toLocaleString();
 }
 
@@ -1013,9 +1044,9 @@ window.addEventListener('DOMContentLoaded', updateRecentFishDisplay);
 const bgMusic = document.getElementById('bg-music');
 const musicVolumeSlider = document.getElementById('music-volume');
 
-// Load saved volume or default to 0.4
+// Load saved volume or default to 0.25
 let savedVolume = parseFloat(localStorage.getItem('fishyMusicVolume'));
-if (isNaN(savedVolume)) savedVolume = 0.4;
+if (isNaN(savedVolume)) savedVolume = 0.25;
 if (bgMusic) bgMusic.volume = savedVolume;
 if (musicVolumeSlider) musicVolumeSlider.value = savedVolume;
 
@@ -1038,6 +1069,68 @@ if (musicVolumeSlider) {
     localStorage.setItem('fishyMusicVolume', v);
   });
 }
+
+// --- UI Sounds Logic ---
+const clickSound = document.getElementById('click-sound');
+const closeSound = document.getElementById('close-sound');
+const uiVolumeSlider = document.getElementById('ui-volume');
+
+// Load saved UI volume or default to 0.5
+let savedUIVolume = parseFloat(localStorage.getItem('fishyUIVolume'));
+if (isNaN(savedUIVolume)) savedUIVolume = 0.5;
+if (clickSound) clickSound.volume = savedUIVolume;
+if (closeSound) closeSound.volume = savedUIVolume;
+if (uiVolumeSlider) uiVolumeSlider.value = savedUIVolume;
+
+// UI Volume slider logic
+if (uiVolumeSlider) {
+  uiVolumeSlider.addEventListener('input', e => {
+    const v = parseFloat(e.target.value);
+    if (clickSound) clickSound.volume = v;
+    if (closeSound) closeSound.volume = v;
+    localStorage.setItem('fishyUIVolume', v);
+  });
+}
+
+// Add click sound to all buttons except close settings
+document.querySelectorAll('button:not(#close-settings-btn)').forEach(button => {
+  button.addEventListener('click', () => {
+    if (clickSound) {
+      clickSound.currentTime = 0;
+      clickSound.play().catch(() => {});
+    }
+  });
+});
+
+// Add close sound to settings close button
+const closeSettingsBtn = document.getElementById('close-settings-btn');
+if (closeSettingsBtn) {
+  closeSettingsBtn.addEventListener('click', () => {
+    if (closeSound) {
+      closeSound.currentTime = 0;
+      closeSound.play().catch(() => {});
+    }
+  });
+}
+
+// Add wobble animation function
+function wobbleElement(element) {
+  if (!element) return;
+  element.style.animation = 'none';
+  // Force reflow
+  void element.offsetWidth;
+  element.style.animation = 'wobble 0.5s cubic-bezier(.36,.07,.19,.97) both';
+}
+
+// Add event listeners for filter checkboxes
+document.querySelectorAll('.rarity-filter, #shiny-filter').forEach(checkbox => {
+  checkbox.addEventListener('change', function() {
+    const tickSound = document.getElementById('tick-sound');
+    tickSound.currentTime = 0;
+    tickSound.play();
+    filterInventory();
+  });
+});
 
 
 

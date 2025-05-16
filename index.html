@@ -46,15 +46,21 @@
       Reel Speed: <span id="reel-speed-level">I</span>
     </div>
   </div>
-  <nav class="navbar">
-    <button class="tab-btn pixel-btn active" data-tab="fishing">Fishing</button>
-    <button class="tab-btn pixel-btn" data-tab="inventory">Inventory</button>
-    <button class="tab-btn pixel-btn" data-tab="upgrade">Upgrades</button>
-    <button class="tab-btn pixel-btn" data-tab="potions">Potions</button>
-    <button class="tab-btn pixel-btn" data-tab="relics">Relics</button>
-    <button class="tab-btn pixel-btn" data-tab="shop">Shop</button>
-    <button id="settings-btn" class="pixel-btn" style="margin-left:auto;display:flex;align-items:center;gap:0.4em;">
-      <span style="font-size:1.2em;">&#9881;</span>
+  <nav class="navbar" style="display: flex; justify-content: center; align-items: center; position: relative;">
+    <div style="display: flex; gap: 0.5em;">
+      <button class="tab-btn pixel-btn active" data-tab="fishing">Fishing</button>
+      <button class="tab-btn pixel-btn" data-tab="inventory">Inventory</button>
+      <button class="tab-btn pixel-btn" data-tab="upgrade">Upgrades</button>
+      <button class="tab-btn pixel-btn" data-tab="potions">Potions</button>
+      <button class="tab-btn pixel-btn" data-tab="relics">Relics</button>
+      <button class="tab-btn pixel-btn" data-tab="index">Index</button>
+      <button class="tab-btn pixel-btn" data-tab="mastery">Mastery</button>
+      <button class="tab-btn pixel-btn" data-tab="clan">Clan</button>
+      <button class="tab-btn pixel-btn" data-tab="crates">Crates</button>
+      <button class="tab-btn pixel-btn" data-tab="shop">Shop</button>
+    </div>
+    <button id="settings-btn" class="pixel-btn" style="position: absolute; right: 0; display: flex; align-items: center; gap: 0.4em;">
+      <span style="font-size: 1.2em;">&#9881;</span>
     </button>
   </nav>
   <!-- Settings Panel -->
@@ -64,6 +70,10 @@
     <div style="margin-top:1.2em;margin-bottom:1.2em;display:flex;align-items:center;gap:1em;">
       <label for="music-volume" style="color:#00bcd4;font-family:'Press Start 2P',Arial,sans-serif;font-size:0.95em;">Music</label>
       <input type="range" id="music-volume" min="0" max="1" step="0.01" style="flex:1;" />
+    </div>
+    <div style="margin-top:1.2em;margin-bottom:1.2em;display:flex;align-items:center;gap:1em;">
+      <label for="ui-volume" style="color:#00bcd4;font-family:'Press Start 2P',Arial,sans-serif;font-size:0.95em;">UI Sounds</label>
+      <input type="range" id="ui-volume" min="0" max="1" step="0.01" style="flex:1;" />
     </div>
     <form id="cheat-form" style="margin-top:2em;display:flex;gap:0.6em;align-items:center;">
       <input id="cheat-input" type="text" placeholder="Type cheat (e.g. /set coins 10000)" style="flex:1;padding:0.5em 1em;font-family:'Press Start 2P',Arial,sans-serif;font-size:0.85em;background:#181c24;color:#fff;border:2px solid #00bcd4;border-radius:4px;outline:none;" />
@@ -87,6 +97,7 @@
       <div class="inventory-search" style="margin-bottom: 1em; display: flex; gap: 0.5em; justify-content: center;">
         <input type="text" id="fish-search" placeholder="Search fish..." style="padding: 0.5em 1em; font-family: 'Press Start 2P', Arial, sans-serif; font-size: 0.85em; background: #181c24; color: #fff; border: 2px solid #00bcd4; border-radius: 4px; outline: none; width: 300px;">
         <button id="search-btn" class="pixel-btn" style="padding: 0.5em 1.2em; font-size: 0.85em;">Search</button>
+        <button id="reset-filters-btn" class="pixel-btn" style="padding: 0.5em 1.2em; font-size: 0.85em; background: #23283a; border-color: #666; color: #999;">Reset</button>
       </div>
       <div class="inventory-filters" style="display: flex; flex-wrap: wrap; gap: 1em; justify-content: center; margin-bottom: 1em; padding: 0.5em; background: #1d2232; border-radius: 4px;">
         <label class="material-checkbox">
@@ -130,7 +141,7 @@
           <span class="shiny-glow">Shiny</span>
         </label>
       </div>
-      <div id="inventory-list">No items yet.</div>
+      <div id="inventory-list" style="height: 600px; overflow-y: auto; padding-right: 10px; margin-top: 0;" class="style-7">No items yet.</div>
     </section>
     <section id="upgrade" class="tab-content">
       <h2>Upgrades</h2>
@@ -165,6 +176,26 @@
   </div>
 </div>
     </section>
+    <section id="relics" class="tab-content">
+      <h2>Relics</h2>
+      <div id="relics-list">Relics coming soon!</div>
+    </section>
+    <section id="index" class="tab-content">
+      <h2>Index</h2>
+      <div id="index-list">Index coming soon!</div>
+    </section>
+    <section id="mastery" class="tab-content">
+      <h2>Mastery</h2>
+      <div id="mastery-list">Mastery coming soon!</div>
+    </section>
+    <section id="clan" class="tab-content">
+      <h2>Clan</h2>
+      <div id="clan-list">Clan coming soon!</div>
+    </section>
+    <section id="crates" class="tab-content">
+      <h2>Crates</h2>
+      <div id="crates-list">Crates coming soon!</div>
+    </section>
     <section id="shop" class="tab-content">
       <h2>Shop</h2>
       <div id="shop-list">Shop coming soon!</div>
@@ -173,12 +204,11 @@
       <h2>Potions</h2>
       <div id="potions-list">Potions coming soon!</div>
     </section>
-    <section id="relics" class="tab-content">
-      <h2>Relics</h2>
-      <div id="relics-list">Relics coming soon!</div>
-    </section>
   </main>
   <script type="module" src="script.js"></script>
   <audio id="bg-music" src="assets/song.mp3" loop></audio>
+  <audio id="click-sound" src="assets/click.mp3"></audio>
+  <audio id="close-sound" src="assets/close.mp3"></audio>
+  <audio id="tick-sound" src="assets/tick.mp3"></audio>
 </body>
 </html>
